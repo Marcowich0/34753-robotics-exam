@@ -1,6 +1,7 @@
 import sympy as sp
 import numpy as np
 from sympy import pi, sin, cos
+import matplotlib.pyplot as plt
 
 def skew_matrix(v):
     return sp.Matrix([[0, -v[2], v[1]],
@@ -46,6 +47,4 @@ def Jacobian_from_denavit_hartenberg(DH_list, deg = False):
 
 
 
-        
 
-        
