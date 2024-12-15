@@ -46,5 +46,55 @@ def Jacobian_from_denavit_hartenberg(DH_list, deg = False):
     return Jac
 
 
+def Rotation_matrix(angle, axis = 'z', deg = False):
+    if deg:
+        angle = sp.rad(angle)
+    if axis == 'x':
+        return sp.Matrix([[1, 0, 0, 0],
+                          [0, cos(angle), -sin(angle), 0],
+                          [0, sin(angle), cos(angle), 0],
+                          [0, 0, 0, 1]])
+    elif axis == 'y':
+        return sp.Matrix([[cos(angle), 0, sin(angle), 0],
+                          [0, 1, 0, 0],
+                          [-sin(angle), 0, cos(angle), 0],
+                          [0, 0, 0, 1]])
+    elif axis == 'z':
+        return sp.Matrix([[cos(angle), -sin(angle), 0, 0],
+                          [sin(angle), cos(angle), 0, 0],
+                          [0, 0, 1, 0],
+                          [0, 0, 0, 1]])
+    else:
+        raise ValueError('Invalid axis. Choose from x, y, z')
+    
+def Tranlation_matrix(trans):
+    return sp.Matrix([[1,0,0,trans[0]],
+                      [0,1,0,trans[1]],
+                      [0,0,1,trans[2]],
+                        [0,0,0,1]])
 
 
+def Find_maxmin_in_function(f, var, domain):
+
+    all_points = np.linspace(domain.start, domain.end, 100)
+    # Evaluate f(t) at all points to find the maximum value
+    v_values = [f.subs(var, point) for point in all_points]
+
+    max = f.subs(var, all_points[np.argmax(v_values)])
+    min = f.subs(var, all_points[np.argmin(v_values)])
+    print(f"Maxima: { all_points[np.argmax(v_values)].evalf(3) } with value: {max} = {max.evalf(4)}")
+    print(f"Minima: { all_points[np.argmin(v_values)].evalf(3) } with value: {min} = {min.evalf(4)}")
+
+    return all_points[np.argmax(v_values)], np.max(v_values), all_points[np.argmin(v_values)], np.min(v_values)
+
+def Transformation_matrix_from_3_points(P0, Px, Py):
+    # P0: The origin, Px: A point on the x-axis, Py: A point in the xy-plane
+    x = (Px - P0).normalized()
+    y = (Py - P0).normalized()
+
+    T = sp.eye(4)
+    T[:3,0] = x
+    T[:3,2] = x.cross(y).normalized()
+    T[:3,1] = T[:3,2].cross(x)
+    T[:3,3] = P0
+    return T.evalf(4)
