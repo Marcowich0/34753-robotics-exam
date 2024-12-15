@@ -67,6 +67,13 @@ def Rotation_matrix(angle, axis = 'z', deg = False):
     else:
         raise ValueError('Invalid axis. Choose from x, y, z')
     
+
+def find_denevit_hartenberg_perameters_from_transformation(T):
+    theta_sol, d_sol, a_sol, alpha_sol = sp.symbols('theta d a alpha')
+    Transformation = transformation_from_denavit_hartenberg([[theta_sol, d_sol, a_sol, alpha_sol]])
+    sol = sp.solve(Transformation - T)[0]
+    return sol
+
 def Tranlation_matrix(trans):
     return sp.Matrix([[1,0,0,trans[0]],
                       [0,1,0,trans[1]],
@@ -98,3 +105,8 @@ def Transformation_matrix_from_3_points(P0, Px, Py):
     T[:3,1] = T[:3,2].cross(x)
     T[:3,3] = P0
     return T.evalf(4)
+
+
+def Normalize_fraction(TF, size):
+    num, den = sp.fraction(TF)
+    return (num / size) / (den / size)
