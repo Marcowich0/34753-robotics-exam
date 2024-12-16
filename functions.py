@@ -71,7 +71,7 @@ def Rotation_matrix(angle, axis = 'z', deg = False):
 def find_denevit_hartenberg_perameters_from_transformation(T):
     theta_sol, d_sol, a_sol, alpha_sol = sp.symbols('theta d a alpha')
     Transformation = transformation_from_denavit_hartenberg([[theta_sol, d_sol, a_sol, alpha_sol]])
-    sol = sp.solve(Transformation - T)[0]
+    sol = sp.solve(Transformation - T)
     return sol
 
 def Tranlation_matrix(trans):
