@@ -34,8 +34,8 @@ def Jacobian_from_denavit_hartenberg(DH_list, deg = False):
     Jac = sp.zeros(6, N)
     o_n = T_arr[-1][:3, 3]
     for i, (T, peram) in enumerate(zip(T_arr[:-1], DH_list)):
-        revolute = isinstance(peram[0], sp.Basic) or isinstance(peram[3], sp.Basic) # if joint is revolute
-        prismatic = isinstance(peram[1], sp.Basic) or isinstance(peram[2], sp.Basic) # if joint is prismatic
+        revolute = isinstance(peram[0], sp.Function) or isinstance(peram[3], sp.Function) # if joint is revolute
+        prismatic = isinstance(peram[1], sp.Function) or isinstance(peram[2], sp.Function) # if joint is prismatic
         if (revolute): 
             z = T[:3, 2]
             o = T[:3, 3]
